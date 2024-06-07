@@ -1,0 +1,62 @@
+# Gradle specific files
+.gradle/
+build/
+
+# IDEA specific files
+.idea/
+*.iml
+
+# Eclipse specific files
+.classpath
+.project
+.settings/
+
+# VS Code specific files
+.vscode/
+
+# Intellij IDEA specific files
+out/
+
+# MacOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+
+# Compiled class files
+*.class
+
+# JAR files
+*.jar
+*.war
+*.ear
+
+# Generated files
+/build/
+
+# Docker files
+docker/
+
+# Gradle wrapper files
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+
+# Other Gradle files
+.gradle/
+build/
+
+# Linux specific files
+*~
+
+# Application specific files
+.env
+.secret
