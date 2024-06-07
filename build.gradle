@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+group 'com.vtd.backend'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Implementation dependencies
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4' // High-performance caching library
+    implementation 'com.oracle.database.jdbc:ojdbc8:19.8.0.0' // Oracle JDBC driver
+    implementation 'com.yubico:webauthn-server-core:2.5.0' // Yubico WebAuthn server library for handling passkeys
+    implementation 'org.projectlombok:lombok:1.18.24' // Lombok library for boilerplate code reduction
+    implementation 'org.slf4j:slf4j-api:1.7.36' // SLF4J API for logging
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Spring Boot starter for JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb' // Spring Boot starter for MongoDB
+    implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Boot starter for building web applications
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+
+
+    // Compile-only dependencies
+    compileOnly 'org.projectlombok:lombok:1.18.24' // Lombok annotation processor for compile-time code generation
+
+    // Annotation processor dependencies
+    annotationProcessor 'org.projectlombok:lombok:1.18.24' // Lombok annotation processor for compile-time code generation
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+
+    // Test implementation dependencies
+    testImplementation 'com.h2database:h2' // H2 database for testing purposes
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1' // JUnit Jupiter API for writing tests
+    testImplementation 'org.mockito:mockito-core:4.0.0' // Mockito for mocking in tests
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot starter for testing, includes JUnit, Mockito, etc.
+
+    // Test runtime-only dependencies
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1' // JUnit Jupiter Engine for running tests
+}
+
+test {
+    useJUnitPlatform()
+}
