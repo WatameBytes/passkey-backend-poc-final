@@ -66,5 +66,18 @@ public class BytesUtil {
     ObjectId objectId = new ObjectId(bytes);
     return objectId.toHexString();
   }
+
+  // Method to convert Long to byte[]
+  public static byte[] longToBytes(Long value) {
+    ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+    buffer.putLong(value);
+    return buffer.array();
+  }
+
+  // Method to convert byte[] to Long
+  public static Long bytesToLong(byte[] bytes) {
+    ByteBuffer buffer = ByteBuffer.wrap(bytes);
+    return buffer.getLong();
+  }
 }
 
