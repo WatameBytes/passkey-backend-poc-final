@@ -1,0 +1,133 @@
+openapi: 3.0.1
+info:
+  title: Authentication API
+  description: API for handling user authentication assertions
+  version: 1.0.0
+paths:
+  /authenticate/assertion/start:
+    post:
+      summary: Start the authentication assertion process
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "a"
+      responses:
+        '200':
+          description: Successfully started the assertion process
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  assertionId:
+                    type: string
+                    example: "e75fb5c2-bcda-4e38-9035-c28751cd5495"
+                  publicKeyCredentialRequestOptions:
+                    type: object
+                    properties:
+                      challenge:
+                        type: string
+                        example: "xwFkjo1prY5A5lonN6NnxtbZxNXVp9ylAstyHp3X10Y"
+                      timeout:
+                        type: integer
+                        example: 60000
+                      rpId:
+                        type: string
+                        example: "localhost"
+                      allowCredentials:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              example: "public-key"
+                            id:
+                              type: string
+                              example: "qCT20UEG3P_gf6R4v5E7t0DYThaEkxkOMPDaZWGkch4"
+                            transports:
+                              type: array
+                              items:
+                                type: string
+                      userVerification:
+                        type: string
+                        example: "preferred"
+                      extensions:
+                        type: object
+                        properties:
+                          appid:
+                            type: string
+                            example: "https://localhost:8080"
+                          largeBlob:
+                            type: string
+                            nullable: true
+                          uvm:
+                            type: string
+                            nullable: true
+  /authenticate/assertion/finish:
+    post:
+      summary: Finish the authentication assertion process
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assertionId:
+                  type: string
+                  example: "703027cc-160f-4a3e-854d-f42c66946c55"
+                credential:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: "public-key"
+                    id:
+                      type: string
+                      example: "aSv5qr2L2ZsSPvKihPkaowqIDkypgYN6bWxabZBOGho"
+                    rawId:
+                      type: string
+                      example: "aSv5qr2L2ZsSPvKihPkaowqIDkypgYN6bWxabZBOGho"
+                    authenticatorAttachment:
+                      type: string
+                      example: "cross-platform"
+                    response:
+                      type: object
+                      properties:
+                        clientDataJSON:
+                          type: string
+                          example: "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoidGg2U2ZGcUFFcjM5b1VzZG5qY1R6YU9lYWJvVEhNNE9zMVkzSlNXQl83ZyIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0OjMwMDAiLCJjcm9zc09yaWdpbiI6ZmFsc2V9"
+                        authenticatorData:
+                          type: string
+                          example: "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAAAAg"
+                        signature:
+                          type: string
+                          example: "MEYCIQDiDvQoTqK7gu33yFtLFLBvZ-VUBhhKZDTBxyuRPxUGdgIhAKjNVZG2n4hyA9vKeyjgVj9KOrYtdDReINsil95FZ4G8"
+                        userHandle:
+                          type: string
+                          nullable: true
+                    clientExtensionResults:
+                      type: object
+                      properties:
+                        appid:
+                          type: boolean
+                          example: false
+      responses:
+        '200':
+          description: Successfully finished the assertion process
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Assertion successful"
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
