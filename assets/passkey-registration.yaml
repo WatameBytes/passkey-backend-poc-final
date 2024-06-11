@@ -1,0 +1,175 @@
+openapi: 3.0.0
+info:
+  title: Passkey Registration API
+  version: 1.0.0
+paths:
+  /register/registration/start:
+    post:
+      summary: Start the registration process for a passkey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "a"
+      responses:
+        '200':
+          description: Registration initiation successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  registrationId:
+                    type: string
+                    format: uuid
+                    example: "69acacd0-e14f-4d01-bd6e-b7d64b5fbb4e"
+                  publicKeyCredentialCreationOptions:
+                    type: object
+                    properties:
+                      rp:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: "Example Application"
+                          id:
+                            type: string
+                            example: "localhost"
+                      user:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: "a"
+                          displayName:
+                            type: string
+                            example: "a"
+                          id:
+                            type: string
+                            example: "AAAAAAAAAAE"
+                      challenge:
+                        type: string
+                        example: "ajqnQGE5Ca5sr4cJ0MMKwLoIaQ-iAZRjLxZu3FG-K0A"
+                      pubKeyCredParams:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            alg:
+                              type: integer
+                            type:
+                              type: string
+                        example:
+                          - alg: -7
+                            type: "public-key"
+                          - alg: -35
+                            type: "public-key"
+                          - alg: -36
+                            type: "public-key"
+                          - alg: -257
+                            type: "public-key"
+                          - alg: -258
+                            type: "public-key"
+                          - alg: -259
+                            type: "public-key"
+                      timeout:
+                        type: integer
+                        example: 20000
+                      excludeCredentials:
+                        type: array
+                        items:
+                          type: object
+                      authenticatorSelection:
+                        type: object
+                        properties:
+                          authenticatorAttachment:
+                            type: string
+                            nullable: true
+                          requireResidentKey:
+                            type: boolean
+                            nullable: true
+                          residentKey:
+                            type: string
+                            nullable: true
+                          userVerification:
+                            type: string
+                            example: "preferred"
+                      attestation:
+                        type: string
+                        example: "none"
+                      extensions:
+                        type: object
+                        properties:
+                          appidExclude:
+                            type: string
+                            example: "https://localhost:8080"
+                          credProps:
+                            type: boolean
+                            example: true
+                          largeBlob:
+                            type: string
+                            nullable: true
+                          uvm:
+                            type: string
+                            nullable: true
+                  username:
+                    type: string
+                    example: "a"
+  /register/registration/finish:
+    post:
+      summary: Finish the registration process for a passkey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                registrationId:
+                  type: string
+                  example: "c0712b87-5718-4e76-bfc8-44547697563e"
+                credential:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: "public-key"
+                    id:
+                      type: string
+                      example: "chaAPSXnwOtrcInOrXsSAaxVbrQaDG0P6JfhIL3NXdg"
+                    rawId:
+                      type: string
+                      example: "chaAPSXnwOtrcInOrXsSAaxVbrQaDG0P6JfhIL3NXdg"
+                    authenticatorAttachment:
+                      type: string
+                      example: "cross-platform"
+                    response:
+                      type: object
+                      properties:
+                        clientDataJSON:
+                          type: string
+                          example: "eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoibzQyWk1MeFBMWEVsS2NfU2RiRnVCOWtqXzRaWnJKNWNZR1RjeWlZQnFfQSIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0OjMwMDAiLCJjcm9zc09yaWdpbiI6ZmFsc2UsIm90aGVyX2tleXNfY2FuX2JlX2FkZGVkX2hlcmUiOiJkbyBub3QgY29tcGFyZSBjbGllbnREYXRhSlNPTiBhZ2FpbnN0IGEgdGVtcGxhdGUuIFNlZSBodHRwczovL2dvby5nbC95YWJQZXgifQ"
+                        attestationObject:
+                          type: string
+                          example: "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVikSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NBAAAAAQAAAAAAAAAAAAAAAAAAAAAAIHIWgD0l58Dra3CJzq17EgGsVW60GgxtD-iX4SC9zV3YpQECAyYgASFYIPSoAJ2bNLc_xja60fuAwtLHeIA6Euzxd-VFgR3t0H7rIlggfbUnEw393ouCjuO6alXCEIce0l9x2tid-LZoLTTNJ8k"
+                        transports:
+                          type: array
+                          items:
+                            type: string
+                            example: "usb"
+      responses:
+        '200':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Registration successful"

@@ -21,6 +21,8 @@ public class RegisterController {
 
     private final RegistrationService registrationService;
 
+    // TODO: Why are we passing the username back?
+    // Look into that
     @PostMapping("/registration/start")
     public ResponseEntity<RegistrationStartResponse> startRegistration(@RequestBody PasskeyRegistrationRequest passkeyRegistrationRequest) throws JsonProcessingException {
         RegistrationStartResponse registrationStartResponse = registrationService.startRegistration(passkeyRegistrationRequest);

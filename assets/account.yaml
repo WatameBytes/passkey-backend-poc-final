@@ -1,0 +1,73 @@
+openapi: 3.0.0
+info:
+  title: Account API
+  version: 1.0.0
+paths:
+  /account/register:
+    post:
+      summary: Register a new account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "a"
+                password:
+                  type: string
+                  example: "a1"
+      responses:
+        '200':
+          description: Account successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  personaId:
+                    type: string
+                    format: uuid
+                    example: "73a982ef-0088-402b-bc07-31e5fc21672f"
+                  username:
+                    type: string
+                    example: "a"
+  /account/login:
+    post:
+      summary: Log in to an existing account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "a"
+                password:
+                  type: string
+                  example: "a1"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  personaId:
+                    type: string
+                    format: uuid
+                    example: "73a982ef-0088-402b-bc07-31e5fc21672f"
+                  username:
+                    type: string
+                    example: "a"
