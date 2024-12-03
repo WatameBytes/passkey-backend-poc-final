@@ -1,0 +1,60 @@
+{
+  "registrationId" : "mock-registration-id",
+  "publicKeyCredentialCreationOptions" : {
+    "rp" : {
+      "name" : "Example Relying Party",
+      "id" : "example.com"
+    },
+    "user" : {
+      "name" : "testuser",
+      "displayName" : "testuser",
+      "id" : "AAAAAAAAAAE"
+    },
+    "challenge" : "4jUdI9FHUNmQVJGDs0nEVHIz1I2o_49gnT-gJUI1ork",
+    "pubKeyCredParams" : [ {
+      "alg" : -7,
+      "type" : "public-key"
+    }, {
+      "alg" : -35,
+      "type" : "public-key"
+    }, {
+      "alg" : -36,
+      "type" : "public-key"
+    }, {
+      "alg" : -257,
+      "type" : "public-key"
+    }, {
+      "alg" : -258,
+      "type" : "public-key"
+    }, {
+      "alg" : -259,
+      "type" : "public-key"
+    } ],
+    "timeout" : {
+      "empty" : false,
+      "present" : true
+    },
+    "excludeCredentials" : {
+      "empty" : false,
+      "present" : true
+    },
+    "authenticatorSelection" : {
+      "empty" : false,
+      "present" : true
+    },
+    "attestation" : "none",
+    "extensions" : {
+      "appidExclude" : {
+        "empty" : false,
+        "present" : true
+      },
+      "credProps" : true,
+      "largeBlob" : {
+        "empty" : true,
+        "present" : false
+      },
+      "uvm" : null
+    }
+  },
+  "username" : "testuser"
+}

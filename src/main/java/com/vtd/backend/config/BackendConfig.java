@@ -1,10 +1,8 @@
 package com.vtd.backend.config;
 
-import com.vtd.backend.credentialRepository.CredentialService;
+import com.vtd.backend.config.credentialRepository.CredentialService;
 import com.yubico.webauthn.RelyingParty;
 import com.yubico.webauthn.data.RelyingPartyIdentity;
-import com.yubico.webauthn.extension.appid.AppId;
-import com.yubico.webauthn.extension.appid.InvalidAppIdException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,9 +27,6 @@ public class BackendConfig {
     @Value("${app.relying-party-origins}")
     private String relyingPartyOrigins;
 
-    @Value("${app.relying-party-appId}")
-    private String relyingPartyAppId;
-
     @Bean
     public RelyingParty relyingParty(CredentialService credentialService) {
         Set<String> origins = Arrays.stream(relyingPartyOrigins.split(","))
@@ -46,12 +41,5 @@ public class BackendConfig {
                 .credentialRepository(credentialService)
                 .origins(origins)
                 .build();
-    }
-
-    @Bean
-    public AppId appId() throws InvalidAppIdException {
-        // HTTP IS NOT SUPPORTED!!!!
-        // FRONT END MUST BE IN HTTPS!!!
-        return new AppId(relyingPartyAppId);
     }
 }

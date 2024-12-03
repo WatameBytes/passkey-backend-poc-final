@@ -19,7 +19,6 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.24' // Lombok library for boilerplate code reduction
     implementation 'org.slf4j:slf4j-api:1.7.36' // SLF4J API for logging
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Spring Boot starter for JPA
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb' // Spring Boot starter for MongoDB
     implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Boot starter for building web applications
     implementation 'org.mapstruct:mapstruct:1.5.2.Final'
 
@@ -39,6 +38,16 @@ dependencies {
 
     // Test runtime-only dependencies
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1' // JUnit Jupiter Engine for running tests
+
+    // Spring Boot Starter for Data Cassandra
+    implementation 'org.springframework.boot:spring-boot-starter-data-cassandra'
+
+    // (Optional) For Spring Web if you want to expose REST endpoints
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // (Optional) Test dependencies for Cassandra
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.data:spring-data-cassandra-test'
 }
 
 test {
