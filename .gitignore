@@ -47,8 +47,8 @@ Thumbs.db
 docker/
 
 # Gradle wrapper files
-gradle/wrapper/gradle-wrapper.jar
-gradle/wrapper/gradle-wrapper.properties
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
 
 # Other Gradle files
 .gradle/
