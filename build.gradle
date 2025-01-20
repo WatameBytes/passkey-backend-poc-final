@@ -13,41 +13,30 @@ repositories {
 
 dependencies {
     // Implementation dependencies
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4' // High-performance caching library
-    implementation 'com.oracle.database.jdbc:ojdbc8:19.8.0.0' // Oracle JDBC driver
-    implementation 'com.yubico:webauthn-server-core:2.5.0' // Yubico WebAuthn server library for handling passkeys
-    implementation 'org.projectlombok:lombok:1.18.24' // Lombok library for boilerplate code reduction
-    implementation 'org.slf4j:slf4j-api:1.7.36' // SLF4J API for logging
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Spring Boot starter for JPA
-    implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Boot starter for building web applications
+    implementation 'com.oracle.database.jdbc:ojdbc8:19.8.0.0'
+    implementation 'com.yubico:webauthn-server-core:2.5.0'
+    implementation 'org.projectlombok:lombok:1.18.24'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mapstruct:mapstruct:1.5.2.Final'
-
+    implementation 'com.google.guava:guava:32.1.2-jre'
+    implementation 'com.h2database:h2'  // Added H2 as main dependency
 
     // Compile-only dependencies
-    compileOnly 'org.projectlombok:lombok:1.18.24' // Lombok annotation processor for compile-time code generation
+    compileOnly 'org.projectlombok:lombok:1.18.24'
 
     // Annotation processor dependencies
-    annotationProcessor 'org.projectlombok:lombok:1.18.24' // Lombok annotation processor for compile-time code generation
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 
     // Test implementation dependencies
-    testImplementation 'com.h2database:h2' // H2 database for testing purposes
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1' // JUnit Jupiter API for writing tests
-    testImplementation 'org.mockito:mockito-core:4.0.0' // Mockito for mocking in tests
-    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot starter for testing, includes JUnit, Mockito, etc.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testImplementation 'org.mockito:mockito-core:4.0.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // Test runtime-only dependencies
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1' // JUnit Jupiter Engine for running tests
-
-    // Spring Boot Starter for Data Cassandra
-    implementation 'org.springframework.boot:spring-boot-starter-data-cassandra'
-
-    // (Optional) For Spring Web if you want to expose REST endpoints
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    // (Optional) Test dependencies for Cassandra
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.data:spring-data-cassandra-test'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 test {

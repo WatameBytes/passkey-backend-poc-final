@@ -1,15 +1,9 @@
--- First, check if data exists
-DECLARE
-v_count NUMBER;
-BEGIN
-SELECT COUNT(*) INTO v_count FROM identity_entity;
-
--- Only insert if no data exists
-IF v_count = 0 THEN
-    INSERT INTO identity_entity (public_guid, user_id)
-SELECT 'guid' || LEVEL, 'user' || LEVEL || '@example.com'
-FROM DUAL
-    CONNECT BY LEVEL <= 5;
-END IF;
-END;
-/
+INSERT INTO identity_entity (id, public_guid, user_id)
+SELECT * FROM (
+                  SELECT 1, 'guid1guid1guid', 'user1@example.com' UNION ALL
+                  SELECT 2, 'guid2guid2guid', 'user2@example.com' UNION ALL
+                  SELECT 3, 'guid3guid3guid', 'user3@example.com' UNION ALL
+                  SELECT 4, 'guid4guid4guid', 'user4@example.com' UNION ALL
+                  SELECT 5, 'guid5guid5guid', 'user5@example.com'
+              ) AS tmp
+WHERE NOT EXISTS (SELECT 1 FROM identity_entity);

@@ -1,6 +1,5 @@
 package com.vtd.backend.config.credentialRepository;
 
-import com.datastax.oss.driver.shaded.guava.common.io.ByteStreams;
 import com.vtd.backend.entity.IdentityEntity;
 import com.vtd.backend.entity.PasskeyEntity;
 import com.vtd.backend.repository.IdentityEntityRepository;

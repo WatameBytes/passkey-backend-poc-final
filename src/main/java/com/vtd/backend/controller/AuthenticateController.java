@@ -1,13 +1,13 @@
 package com.vtd.backend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.vtd.backend.config.CacheService;
 import com.vtd.backend.entity.ChallengeEntity;
 import com.vtd.backend.models.authenticate.FinishRequestA;
 import com.vtd.backend.models.authenticate.FinishResponseA;
 import com.vtd.backend.models.authenticate.StartRequestA;
 import com.vtd.backend.models.authenticate.StartResponseA;
 import com.vtd.backend.models.register.FinishResponse;
-import com.vtd.backend.repository.ChallengeRepository;
 import com.vtd.backend.repository.IdentityEntityRepository;
 import com.vtd.backend.repository.PasskeyEntityRepository;
 import com.yubico.webauthn.AssertionRequest;
@@ -45,31 +45,28 @@ public class AuthenticateController {
     private PasskeyEntityRepository passkeyEntityRepository;
 
     @Autowired
-    private ChallengeRepository challengeRepository;
+    private RelyingParty relyingParty;
 
     @Autowired
-    private RelyingParty relyingParty;
+    private CacheService cacheService;
 
     @PostMapping("/authenticate/start")
     public ResponseEntity<StartResponseA> startAuthenticate(@RequestBody StartRequestA startAuthenticate) throws JsonProcessingException {
-
-        System.out.println("THIS URL WAS HIT");
-
         AssertionRequest request = relyingParty.startAssertion(
                 StartAssertionOptions.builder()
                         .timeout(60000L)
                         .build());
 
         String credentialGetJson = request.toCredentialsGetJson();
-        String saveToDatabase = request.toJson();
+        String saveToCache = request.toJson();
 
+        // Generate a unique challenge ID
         String assertionId = UUID.randomUUID().toString();
 
-        ChallengeEntity challengeEntity = new ChallengeEntity();
-        challengeEntity.setChallengeId(assertionId);
-        challengeEntity.setChallengeJson(saveToDatabase);
-        challengeRepository.save(challengeEntity);
+        // Save challenge to cache
+        cacheService.save(assertionId, saveToCache);
 
+        // Construct the response for the client
         StartResponseA clientResponse = new StartResponseA();
         clientResponse.setAssertionId(assertionId);
         clientResponse.setCredentialJson(credentialGetJson);
@@ -79,23 +76,20 @@ public class AuthenticateController {
 
     @PostMapping("/authenticate/finish")
     public ResponseEntity<FinishResponseA> finishAuthenticate(@RequestBody FinishRequestA finishAuthenticate) throws IOException {
-        System.out.println("HIT THIS");
+        // Retrieve the challenge JSON from the cache
+        String challengeJson = cacheService.retrieve(finishAuthenticate.getAssertionId());
 
-        System.out.println("FinishAuthenticate: " + finishAuthenticate);
-
-        PublicKeyCredential<AuthenticatorAssertionResponse, ClientAssertionExtensionOutputs> pkc =
-                PublicKeyCredential.parseAssertionResponseJson(finishAuthenticate.getPublicKeyCredentialJson());
-
-
-        Optional<ChallengeEntity> requestObject = challengeRepository.findByChallengeId(finishAuthenticate.getAssertionId());
-
-        if (requestObject.isEmpty()) {
-            return ResponseEntity.badRequest().body(new FinishResponseA("Invalid registration ID"));
+        if (challengeJson == null) {
+            // Handle cache miss
+            return ResponseEntity.badRequest().body(new FinishResponseA("Invalid or expired registration ID"));
         }
 
-        AssertionRequest request = AssertionRequest.fromJson(requestObject.get().getChallengeJson());
+        AssertionRequest request = AssertionRequest.fromJson(challengeJson);
 
         try {
+            PublicKeyCredential<AuthenticatorAssertionResponse, ClientAssertionExtensionOutputs> pkc =
+                    PublicKeyCredential.parseAssertionResponseJson(finishAuthenticate.getPublicKeyCredentialJson());
+
             AssertionResult result = relyingParty.finishAssertion(FinishAssertionOptions.builder()
                     .request(request)  // The PublicKeyCredentialRequestOptions from startAssertion above
                     .response(pkc)
@@ -107,7 +101,7 @@ public class AuthenticateController {
             }
         } catch (AssertionFailedException e) {
             System.out.println(e);
-            throw new RuntimeException("Authentication failed");
+            return ResponseEntity.badRequest().body(new FinishResponseA("Authentication failed: " + e.getMessage()));
         }
 
         return ResponseEntity.ok(new FinishResponseA("Success"));
