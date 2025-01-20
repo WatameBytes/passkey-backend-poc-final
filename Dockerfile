@@ -18,8 +18,5 @@ RUN ./gradlew bootJar
 # Expose the application port
 EXPOSE 8080
 
-# Copy the JAR file to the container
-COPY build/libs/Backend-Passkey-Final-1.0-SNAPSHOT.jar app.jar
-
-# Run the application
-CMD ["java", "-jar", "app.jar"]
+# The JAR file path should match your build output
+CMD ["java", "-jar", "build/libs/Backend-Passkey-Final-1.0-SNAPSHOT.jar"]
