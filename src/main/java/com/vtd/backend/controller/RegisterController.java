@@ -94,7 +94,7 @@ public class RegisterController {
         }
 
         LocalDateTime currentDateTime = LocalDateTime.now();
-        String name = String.format("%s-%s", "FuwaMoco", currentDateTime);
+        String name = String.format("%s-%s", "Moco", currentDateTime);
 
         System.out.println("PublicGuid before: " + startRequest.getPublicGuid());
 

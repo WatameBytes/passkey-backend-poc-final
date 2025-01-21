@@ -50,11 +50,8 @@ public class CredentialService implements CredentialRepository {
     @Override
     @Transactional
     public Set<PublicKeyCredentialDescriptor> getCredentialIdsForUsername(String username) {
-        // Passkey - ....
-        // Assume we pass a JWT here
-        System.out.println("Username is : " + username);
-
-        System.out.println("GET CREDENTIAL WAS CALLED");
+        System.out.println("GET CREDENTIAL IDS FOR USERNAME CALLED");
+        // Pass an empty list, since we don't have a username
         return Collections.emptySet();
     }
 
@@ -76,32 +73,54 @@ public class CredentialService implements CredentialRepository {
         //return Optional.empty();
     }
 
+    /**
+     * Looks up a WebAuthn registered credential using credentialId and userHandle.
+     *
+     * The key challenge here was handling the format mismatch between WebAuthn's ByteArray
+     * userHandle and our database's raw GUID string storage:
+     *
+     * - WebAuthn passes userHandle as ByteArray (e.g., ByteArray(6775696431677569643167756964))
+     * - Our database stores it as raw string (e.g., "guid1guid1guid")
+     *
+     * The solution was to decode the ByteArray userHandle to its raw string form before
+     * comparing with the stored GUID, rather than comparing Base64 encoded versions.
+     * This matches our database schema while maintaining WebAuthn's required ByteArray
+     * format in the RegisteredCredential response.
+     *
+     * @param credentialId The WebAuthn credential ID as ByteArray
+     * @param userHandle The user identifier as ByteArray (contains raw GUID when decoded)
+     * @return Optional<RegisteredCredential> with matching credential if found and GUID matches,
+     *         empty Optional otherwise
+     */
     @Override
     @Transactional
     public Optional<RegisteredCredential> lookup(ByteArray credentialId, ByteArray userHandle) {
         String credentialIdBase64 = Base64.getEncoder().encodeToString(credentialId.getBytes());
-        String publicGuid = Base64.getEncoder().encodeToString(userHandle.getBytes());
+        // Decode the userHandle to get the raw GUID
+        String decodedUserHandle = new String(userHandle.getBytes());
 
+        Optional<PasskeyEntity> passkeyEntityOptional = passkeyEntityRepository.findByCredentialId(credentialIdBase64);
 
-        System.out.println("CredentialId : " + credentialIdBase64);
-
-        Optional<PasskeyEntity> passkeyEntityOptional =
-                passkeyEntityRepository.findByCredentialId(credentialIdBase64);
-
-        if (!passkeyEntityOptional.get().getIdentityEntity().getPublicGuid().equals(publicGuid)) {
-            System.out.println("Failed to find a Passkey");
+        if (!passkeyEntityOptional.isPresent()) {
+            System.out.println("No passkey found with credentialId: " + credentialIdBase64);
             return Optional.empty();
         }
 
+        String storedGuid = passkeyEntityOptional.get().getIdentityEntity().getPublicGuid();
 
-        System.out.println("Passkey Entity: " + passkeyEntityOptional.get());
+        if (!storedGuid.equals(decodedUserHandle)) {
+            System.out.println("PublicGuid mismatch");
+            System.out.println("Expected: " + decodedUserHandle);
+            System.out.println("Actual: " + storedGuid);
+            return Optional.empty();
+        }
 
         return passkeyEntityOptional.map(passkeyEntity ->
                 RegisteredCredential.builder()
-                        .credentialId(new ByteArray(Base64.getDecoder().decode(passkeyEntity.getCredentialId())))
-                        .userHandle(userHandle)
+                        .credentialId(credentialId)  // Use original credentialId ByteArray
+                        .userHandle(userHandle)      // Use original userHandle ByteArray
                         .publicKeyCose(blobToByteArray(passkeyEntity.getPublicKey()))
-                        .signatureCount(0) // Adjust based on your business logic
+                        .signatureCount(0)
                         .build()
         );
     }
@@ -109,6 +128,7 @@ public class CredentialService implements CredentialRepository {
     @Override
     @Transactional
     public Set<RegisteredCredential> lookupAll(ByteArray credentialId) {
+        System.out.println("LOOKUPALL WAS CALLED");
         System.out.println("CredentialId in ByteArray: " + credentialId);
 
         // Convert credential ID to Base64 for repository lookup

@@ -85,6 +85,8 @@ public class AuthenticateController {
         }
 
         AssertionRequest request = AssertionRequest.fromJson(challengeJson);
+        //System.out.println(request);
+        //System.out.println("String: " + request.getUserHandle().get().toString());
 
         try {
             PublicKeyCredential<AuthenticatorAssertionResponse, ClientAssertionExtensionOutputs> pkc =
