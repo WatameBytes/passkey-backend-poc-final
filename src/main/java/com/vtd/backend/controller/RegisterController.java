@@ -113,7 +113,7 @@ public class RegisterController {
         System.out.println(byteArray.getBase64Url());
 
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria = AuthenticatorSelectionCriteria.builder()
-                //.residentKey(ResidentKeyRequirement.PREFERRED)
+                .residentKey(ResidentKeyRequirement.PREFERRED)
                 .userVerification(UserVerificationRequirement.PREFERRED)
                 //.authenticatorAttachment(AuthenticatorAttachment.CROSS_PLATFORM)
                 .build();
