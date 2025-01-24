@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
                 registry.addMapping("/**")
                         .allowedOrigins(
                                 "http://localhost:3000", // Local development
-                                "https://passkey-frontend-poc-final-1h10kiihh-watamebytes-projects.vercel.app/" // Deployed frontend
+                                "https://passkey-frontend-poc-final.vercel.app" // Deployed frontend
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
